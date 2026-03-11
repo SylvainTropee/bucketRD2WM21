@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h2>Truc à faire numéro {{ wishId }}</h2>
+    <h2>{{ wish.title }}</h2>
+    <p><i>Created by {{ wish.author }} on {{ wish.dateCreated | date('Y-m-d') }}</i></p>
+    <p>{{ wish.description }}</p>
 {% endblock %}
 

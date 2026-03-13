@@ -4,5 +4,15 @@
     <h2>{{ wish.title }}</h2>
     <p><i>Created by {{ wish.author }} on {{ wish.dateCreated | date('Y-m-d') }}</i></p>
     <p>{{ wish.description }}</p>
+
+    <div>
+        <a href="{{ path('wish_update', {'id': wish.id}) }}">
+            <button class="secondary">Update !</button>
+        </a>
+        <a href="{{ path('wish_delete', {'id': wish.id}) }}">
+            <button
+                onclick="return confirm('Attention suppression du wish {{ wish.id }} ?')">Delete !</button>
+        </a>
+    </div>
 {% endblock %}
 

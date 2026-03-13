@@ -5,7 +5,9 @@ namespace App\Entity;
 use App\Repository\WishRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: WishRepository::class)]
 class Wish
 {
@@ -15,12 +17,16 @@ class Wish
     private ?int $id = null;
 
     #[ORM\Column(length: 250)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 250, maxMessage: "Too big !")]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50, maxMessage: "Too big !")]
     private ?string $author = null;
 
     #[ORM\Column]
@@ -42,7 +48,7 @@ class Wish
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
 
@@ -66,7 +72,7 @@ class Wish
         return $this->author;
     }
 
-    public function setAuthor(string $author): static
+    public function setAuthor(?string $author): static
     {
         $this->author = $author;
 
@@ -107,5 +113,16 @@ class Wish
         $this->dateUpdated = $dateUpdated;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist(){
+        $this->setDateCreated(new \DateTime());
+        $this->setIsPublished(true);
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(){
+        $this->setDateUpdated(new \DateTime());
     }
 }
